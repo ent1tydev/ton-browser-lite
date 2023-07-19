@@ -30,10 +30,41 @@ class Browser(QWidget):
         QNetworkProxy.setApplicationProxy(proxy)
 
         search_line = QLineEdit()
-        back_button = QPushButton("◀️")
-        reload_button = QPushButton("🔄")
-        search_button = QPushButton("🔎")
-        history_button = QPushButton("📂")
+        back_button = QPushButton("Back")
+        reload_button = QPushButton("Reload")
+        search_button = QPushButton("Search")
+        history_button = QPushButton("History")
+
+        style = '''
+            border-radius: 15px;
+            border: 2px groove #6565FF;
+            padding: 8px;
+        '''
+        search_line.setStyleSheet(f'QLineEdit {{{style}}}')
+        back_button.setStyleSheet(f'''
+            QPushButton {{{style}}}
+            QPushButton:hover {{
+                background-color: #6666FF;
+            }}
+        ''')
+        reload_button.setStyleSheet(f'''
+            QPushButton {{{style}}}
+            QPushButton:hover {{
+                background-color: #6666FF;
+            }}
+        ''')
+        search_button.setStyleSheet(f'''
+            QPushButton {{{style}}}
+            QPushButton:hover {{
+                background-color: #6666FF;
+            }}
+        ''')
+        history_button.setStyleSheet(f'''
+            QPushButton {{{style}}}
+            QPushButton:hover {{
+                background-color: #6666FF;
+            }}
+        ''')
 
         self.browser = QWebEngineView()
         self.history_dialog = HistoryDialog()
