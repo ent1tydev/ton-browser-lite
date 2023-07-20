@@ -15,6 +15,11 @@ def start_proxy():
     if "rldp-http-proxy.exe" not in str(popen('tasklist').read()):
         popen(proxy_start_command)
 
+def clean_history():
+    popen('.\phep.exe flush')
+
+def stop_proxy():
+    popen('.\phep.exe stop')
 
 class Browser(QWidget):
     def __init__(self):
@@ -35,6 +40,7 @@ class Browser(QWidget):
         search_button = QPushButton("Search")
         history_button = QPushButton("History")
 
+        # Set rounded style with border color for input field and buttons
         style = '''
             border-radius: 15px;
             border: 2px groove #6565FF;
@@ -131,14 +137,37 @@ class HistoryDialog(QDialog):
         self.history_text_edit.setReadOnly(True)
         self.history_text_edit.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 
+        clean_button = QPushButton("Clean History")
+        stop_button = QPushButton("Stop Proxy")
+        start_button = QPushButton("Start Proxy")
+
         layout = QVBoxLayout()
         layout.addWidget(self.history_text_edit)
+        layout.addWidget(clean_button)
+        layout.addWidget(stop_button)
+        layout.addWidget(start_button)
 
         self.setLayout(layout)
+
+        clean_button.clicked.connect(self.clean_history_and_close)
+        stop_button.clicked.connect(self.stop_proxy_and_close)
+        start_button.clicked.connect(self.start_proxy_in_thread)
 
     def set_history(self, history_list):
         history_text = '\n'.join(history_list)
         self.history_text_edit.setPlainText(history_text)
+
+    def clean_history_and_close(self):
+        Thread(target=clean_history).start()
+        self.accept()
+
+    def stop_proxy_and_close(self):
+        Thread(target=stop_proxy).start()
+        self.accept()
+
+    def start_proxy_in_thread(self):
+        Thread(target=start_proxy).start()
+        self.accept()
 
 
 if __name__ == '__main__':
